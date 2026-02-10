@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 
+// 저장된 프로필 상태
 const profile = ref<{ name: string; email: string } | null>(null)
 const STORAGE_KEY = 'userProfile'
 
+// 로컬스토리지에서 프로필 로드
 const loadProfile = () => {
   const raw = localStorage.getItem(STORAGE_KEY)
   if (!raw) {
@@ -21,6 +23,7 @@ const loadProfile = () => {
   }
 }
 
+// 화면에 표시할 텍스트
 const nameText = computed(() => profile.value?.name || '설정되지 않음')
 const emailText = computed(() => profile.value?.email || '설정되지 않음')
 

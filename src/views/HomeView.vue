@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+// 입력 상태 및 로컬 저장 키
 const name = ref('')
 const email = ref('')
 const feedback = ref('')
 const STORAGE_KEY = 'userProfile'
 let feedbackTimer: number | undefined
 
+// 로컬스토리지에서 프로필 읽기
 const loadProfile = () => {
   const raw = localStorage.getItem(STORAGE_KEY)
   if (!raw) return
@@ -21,6 +23,7 @@ const loadProfile = () => {
   }
 }
 
+// 로컬스토리지에 프로필 저장
 const saveProfile = () => {
   const nextProfile = { name: name.value.trim(), email: email.value.trim() }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(nextProfile))
@@ -36,6 +39,7 @@ const saveProfile = () => {
   }, 2000)
 }
 
+// 불러오기 버튼 처리
 const handleLoad = () => {
   loadProfile()
   feedback.value = '불러왔어요!'

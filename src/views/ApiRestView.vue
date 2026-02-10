@@ -4,8 +4,10 @@ import { onMounted, ref } from 'vue'
 type User = { id?: number; name: string; email: string }
 type Post = { id?: number; title: string; body: string }
 
+// json-server API 주소
 const API_BASE = 'http://localhost:3000'
 
+// 데이터/상태
 const users = ref<User[]>([])
 const posts = ref<Post[]>([])
 const error = ref('')
@@ -17,6 +19,7 @@ const postForm = ref<Post>({ title: '', body: '' })
 const editingUserId = ref<number | null>(null)
 const editingPostId = ref<number | null>(null)
 
+// 공통 요청 함수
 const request = async <T,>(url: string, options?: RequestInit) => {
   error.value = ''
   const response = await fetch(url, {
@@ -31,6 +34,7 @@ const request = async <T,>(url: string, options?: RequestInit) => {
   return (await response.json()) as T
 }
 
+// 사용자 목록 로드
 const loadUsers = async () => {
   loadingUsers.value = true
   try {
@@ -42,6 +46,7 @@ const loadUsers = async () => {
   }
 }
 
+// 게시글 목록 로드
 const loadPosts = async () => {
   loadingPosts.value = true
   try {
@@ -53,6 +58,7 @@ const loadPosts = async () => {
   }
 }
 
+// 폼 초기화
 const resetUserForm = () => {
   userForm.value = { name: '', email: '' }
   editingUserId.value = null
@@ -63,6 +69,7 @@ const resetPostForm = () => {
   editingPostId.value = null
 }
 
+// 사용자 저장(추가/수정)
 const saveUser = async () => {
   const payload = { name: userForm.value.name.trim(), email: userForm.value.email.trim() }
   if (!payload.name || !payload.email) return
@@ -86,11 +93,13 @@ const saveUser = async () => {
   }
 }
 
+// 사용자 편집 시작
 const editUser = (user: User) => {
   userForm.value = { name: user.name, email: user.email }
   editingUserId.value = user.id ?? null
 }
 
+// 사용자 삭제
 const deleteUser = async (id?: number) => {
   if (!id) return
   try {
@@ -101,6 +110,7 @@ const deleteUser = async (id?: number) => {
   }
 }
 
+// 게시글 저장(추가/수정)
 const savePost = async () => {
   const payload = { title: postForm.value.title.trim(), body: postForm.value.body.trim() }
   if (!payload.title || !payload.body) return
@@ -124,11 +134,13 @@ const savePost = async () => {
   }
 }
 
+// 게시글 편집 시작
 const editPost = (post: Post) => {
   postForm.value = { title: post.title, body: post.body }
   editingPostId.value = post.id ?? null
 }
 
+// 게시글 삭제
 const deletePost = async (id?: number) => {
   if (!id) return
   try {
@@ -139,6 +151,7 @@ const deletePost = async (id?: number) => {
   }
 }
 
+// 초기 로드
 onMounted(async () => {
   await Promise.all([loadUsers(), loadPosts()])
 })
